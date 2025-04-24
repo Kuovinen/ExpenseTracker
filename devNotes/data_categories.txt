@@ -1,0 +1,15 @@
+Date – When the expense occurred.
+
+Category – The type of expense (e.g., Food, Transport, Entertainment).
+
+Amount – The cost of the expense.
+
+Description – Additional notes, such as "Dinner at Joe's Diner."
+
+Recurring – Boolean (Yes/No) indicating if the expense is part of a subscription or regular bill.
+
+Tags – User-defined keywords (e.g., "Urgent", "Gift", "Tax Deductible").
+
+Discount – Records any discount applied.
+
+Expense Priority
