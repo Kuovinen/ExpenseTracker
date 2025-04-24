@@ -1,0 +1,7 @@
+Backend: Python for handling data and logic.
+
+Data Storage: Use pandas for working with CSVs.
+
+Visualization: Use Plotly to create charts.
+
+Interface: Build a graphical user interface (GUI) using Tkinter.

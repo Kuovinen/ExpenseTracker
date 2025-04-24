@@ -1,0 +1,9 @@
+Add an expense (amount, category, date, description).
+
+View expense history in a neat format.
+
+Categorize expenses (e.g., Food, Transport, Entertainment).
+
+Generate reports (monthly summaries, top spending categories).
+
+Visualize data (bar charts, pie charts, etc.).

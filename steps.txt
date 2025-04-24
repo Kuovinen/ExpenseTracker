@@ -1,0 +1,5 @@
+Write functions to add and store expenses.
+
+Implement a way to calculate totals and categorize expenses.
+
+Format the data for easy viewing (like tables in the console).
