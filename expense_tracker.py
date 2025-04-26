@@ -1,7 +1,9 @@
 import data_handler
+import gui
 
 def main():
-    # Example call to a function from data_handler
+  gui.run_gui()
+  '''  # Example call to a function from data_handler
     data_handler.create_csv("data.csv", ["Date", "Category", "Amount", "Description", "Recurring", "Tags", "Discount", "Expense"])
     # Example hardcoded row data
     new_row = {
@@ -15,7 +17,7 @@ def main():
         "Expense": "High"
     }
     # Call the function to append the row
-    data_handler.append_row_to_csv("data.csv", new_row)
+    data_handler.append_row_to_csv("data.csv", new_row)'''
 
 if __name__ == "__main__":
     main()

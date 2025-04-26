@@ -1,10 +1,50 @@
 {
-  "save": {
-    "rus": "сохранить",
-    "eng": "save"
+  "date": {
+    "rus": "Дата",
+    "eng": "Date"
   },
-  "delete": {
-    "rus": "yдалить",
-    "eng": "delete"
+  "category": {
+    "rus": "Категория",
+    "eng": "Category"
+  },
+  "amount": {
+    "rus": "Сумма",
+    "eng": "Amount"
+  },
+  "description": {
+    "rus": "Описание",
+    "eng": "Description"
+  },
+  "recurring": {
+    "rus": "Повторяющееся",
+    "eng": "Recurring"
+  },
+  "tags": {
+    "rus": "Теги",
+    "eng": "Tags"
+  },
+  "discount": {
+    "rus": "Скидка",
+    "eng": "Discount"
+  },
+  "expense": {
+    "rus": "Расход",
+    "eng": "Expense"
+  },
+  "change_language": {
+    "rus": "Сменить язык",
+    "eng": "Change Language"
+  },
+  "add": {
+    "rus": "Добавить",
+    "eng": "Add"
+  },
+  "yes": {
+    "rus": "Да",
+    "eng": "Yes"
+  },
+  "no": {
+    "rus": "Нет",
+    "eng": "No"
   }
 }
