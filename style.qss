@@ -1,0 +1,50 @@
+QWidget {
+    background-color:rgb(12, 16, 19);
+}
+
+QLabel {
+    color:rgb(115, 125, 135);
+    font-size: 12px;
+    font-family: Arial, sans-serif;
+    padding: 4px;
+    font-weight:bold;
+}
+QLineEdit {
+    color: rgb(100, 110, 120);
+    background-color: rgb(15, 20, 24);
+    font-size: 12px;
+    font-family: Arial, sans-serif;
+    border-radius: 2px;
+    border: 1px solid rgb(64, 75, 83); /* Make border visible with a contrasting color */
+}
+QComboBox {
+    color: rgb(100, 110, 120);
+    background-color: rgb(15, 20, 24);
+    font-size: 12px;
+    font-family: Arial, sans-serif;
+    border-radius: 2px;
+    border: 1px solid rgb(100, 110, 120); /* Make border visible with a contrasting color */
+    padding-left:4px;
+}
+QComboBox QAbstractItemView {
+    color: rgb(100, 110, 120); /* Text color for dropdown items */
+    background-color: rgb(15, 20, 24); /* Background color for dropdown items */
+    selection-background-color: rgb(40, 50, 60); /* Background color for selected item */
+    selection-color: rgb(200, 200, 200); /* Text color for selected item */
+    border: 1px solid rgb(100, 110, 120); /* Border for the dropdown list */
+}
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none; /* Removes page background effect */
+}
+QPushButton {
+    background-color:rgb(20, 27, 32);
+    color:rgb(100, 110, 120);
+    border: none;
+    padding: 8px 16px;
+    font-size: 16px;
+    border-radius: 8px;
+}
+
+QPushButton:hover {
+    background-color:rgb(26, 34, 41);
+}

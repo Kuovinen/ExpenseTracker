@@ -2,12 +2,30 @@ from PySide6.QtWidgets import (
     QApplication, QMainWindow, QVBoxLayout, QWidget,
     QLabel, QLineEdit, QComboBox, QFormLayout, QPushButton
 )
+from PySide6.QtCore import QFile
 import translator as tr  # Import the Translator module
 from datetime import datetime
 import data_handler as dh
 
+
+def load_stylesheet(file_name):
+    # Load the QSS stylesheet from a file.
+
+    file = QFile(file_name)
+    file.open(QFile.ReadOnly | QFile.Text)
+    stylesheet = file.readAll().data().decode("utf-8")
+    file.close()
+    return stylesheet
+
+
+
 def run_gui():
     app = QApplication([])  # Create the application instance
+
+    # Load the QSS file
+    stylesheet = load_stylesheet("style.qss")
+    app.setStyleSheet(stylesheet)  # Apply the stylesheet to the entire application
+
     window = MainWindow()  # Create an instance of the main window
     window.show()  # Show the main window
     app.exec()  # Start the application event loop
