@@ -13,3 +13,6 @@ Tags – User-defined keywords (e.g., "Urgent", "Gift", "Tax Deductible").
 Discount – Records any discount applied.
 
 Expense Priority
+
+
+current balance
