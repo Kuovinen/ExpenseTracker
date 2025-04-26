@@ -1,33 +1,33 @@
 {
-  "date": {
+  "Date": {
     "rus": "Дата",
     "eng": "Date"
   },
-  "category": {
+  "Category": {
     "rus": "Категория",
     "eng": "Category"
   },
-  "amount": {
+  "Amount": {
     "rus": "Сумма",
     "eng": "Amount"
   },
-  "description": {
+  "Description": {
     "rus": "Описание",
     "eng": "Description"
   },
-  "recurring": {
+  "Recurring": {
     "rus": "Повторяющееся",
     "eng": "Recurring"
   },
-  "tags": {
+  "Tags": {
     "rus": "Теги",
     "eng": "Tags"
   },
-  "discount": {
+  "Discount": {
     "rus": "Скидка",
     "eng": "Discount"
   },
-  "expense": {
+  "Expense": {
     "rus": "Расход",
     "eng": "Expense"
   },

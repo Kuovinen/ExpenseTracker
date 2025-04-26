@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 import translator as tr
+import data_handler as dh
 
 def run_gui():
     # Create the main application window
@@ -13,7 +14,7 @@ def run_gui():
     form_frame.pack(pady=20)
 
     # Labels and Entry widgets for each field
-    fields = ["date", "category", "amount", "description", "recurring", "tags", "discount", "expense"]
+    fields = ["Date", "Category", "Amount", "Description", "Recurring", "Tags", "Discount", "Expense"]
     entries = {}  # Store references to entry/combobox widgets
     labels = {}  # Store references to label widgets for dynamic language updates
 
@@ -27,7 +28,7 @@ def run_gui():
                 labels[field] = label  # Store reference to label
 
                 # Create entry box or dropdown
-                if field == "recurring":  # Special case for Recurring (dropdown)
+                if field == "Recurring":  # Special case for Recurring (dropdown)
                     combo = ttk.Combobox(form_frame, values=[tr.t("yes"), tr.t("no")])
                     combo.current(0)  # Pre-select "Yes"
                     combo.grid(row=fields.index(field), column=1, padx=10, pady=2)  # Align next to label
@@ -49,6 +50,7 @@ def run_gui():
         # Gather data from all entry fields
         row_data = {field: entries[field].get() for field in fields}
         print("Submitted Data:", row_data)
+        dh.append_row_to_csv("data.csv", row_data)
 
     # Submit Button
     submit_button = tk.Button(root, text=tr.t("add"), font=("Arial", 12), command=submit_data)
