@@ -27,9 +27,9 @@
     "rus": "Скидка",
     "eng": "Discount"
   },
-  "Expense": {
-    "rus": "Расход",
-    "eng": "Expense"
+  "Priority": {
+    "rus": "Приоритет",
+    "eng": "Priority"
   },
   "change_language": {
     "rus": "Сменить язык",
@@ -46,5 +46,81 @@
   "no": {
     "rus": "Нет",
     "eng": "No"
+  },
+  "high": {
+    "rus": "Высокий",
+    "eng": "High"
+  },
+  "medium": {
+    "rus": "Средний",
+    "eng": "Medium"
+  },
+  "low": {
+    "rus": "Низки",
+    "eng": "Low"
+  },
+  "Food": {
+    "rus": "Еда",
+    "eng": "Food"
+  },
+  "Transport": {
+    "rus": "Транспорт",
+    "eng": "Transport"
+  },
+  "Entertainment": {
+    "rus": "Развлечения",
+    "eng": "Entertainment"
+  },
+  "Housing": {
+    "rus": "Жилье",
+    "eng": "Housing"
+  },
+  "Healthcare": {
+    "rus": "Здравоохранение",
+    "eng": "Healthcare"
+  },
+  "Fitness": {
+    "rus": "Фитнес",
+    "eng": "Fitness"
+  },
+  "Education": {
+    "rus": "Образование",
+    "eng": "Education"
+  },
+  "Self-Care": {
+    "rus": "Уход за собой",
+    "eng": "Self-Care"
+  },
+  "ChildrenExpenses": {
+    "rus": "Расходы на детей",
+    "eng": "Children’s Expenses"
+  },
+  "Pets": {
+    "rus": "Домашние животные",
+    "eng": "Pets"
+  },
+  "Technology": {
+    "rus": "Технологии",
+    "eng": "Technology"
+  },
+  "Clothing": {
+    "rus": "Одежда",
+    "eng": "Clothing"
+  },
+  "Insurance": {
+    "rus": "Страхование",
+    "eng": "Insurance"
+  },
+  "Debt": {
+    "rus": "Долги",
+    "eng": "Debt"
+  },
+  "Savings": {
+    "rus": "Сбережения",
+    "eng": "Savings"
+  },
+  "GiftsAndCharity": {
+    "rus": "Подарки и благотворительность",
+    "eng": "Gifts and Charity"
   }
 }

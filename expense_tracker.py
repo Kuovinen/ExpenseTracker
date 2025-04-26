@@ -4,7 +4,7 @@ import gui
 def main():
   gui.run_gui()
   '''  # Example call to a function from data_handler
-    data_handler.create_csv("data.csv", ["Date", "Category", "Amount", "Description", "Recurring", "Tags", "Discount", "Expense"])
+    data_handler.create_csv("data.csv", ["Date", "Category", "Amount", "Description", "Recurring", "Tags", "Discount", "Priority"])
     # Example hardcoded row data
     new_row = {
         "Date": "2025-04-24",
