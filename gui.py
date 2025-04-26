@@ -1,6 +1,7 @@
 from PySide6.QtWidgets import (
-    QApplication, QMainWindow, QVBoxLayout, QWidget,
-    QLabel, QLineEdit, QComboBox, QFormLayout, QPushButton
+    QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QWidget,
+    QLabel, QLineEdit, QComboBox, QFormLayout, QPushButton,QSpacerItem,
+    QSizePolicy,QTableWidget, QTableWidgetItem, QHeaderView
 )
 from PySide6.QtCore import QFile
 import translator as tr  # Import the Translator module
@@ -10,13 +11,11 @@ import data_handler as dh
 
 def load_stylesheet(file_name):
     # Load the QSS stylesheet from a file.
-
     file = QFile(file_name)
     file.open(QFile.ReadOnly | QFile.Text)
     stylesheet = file.readAll().data().decode("utf-8")
     file.close()
     return stylesheet
-
 
 
 def run_gui():
@@ -37,11 +36,15 @@ class MainWindow(QMainWindow):
 
         # Set window properties
         self.setWindowTitle("Expense Tracker")  # Title translated
-        self.setGeometry(100, 100, 800, 600)
+        self.setGeometry(50, 50, 800, 600)
 
         # Create the central widget and layout
         central_widget = QWidget()
-        self.form_layout = QFormLayout()  # Form layout for labels and inputs
+        self.main_layout = QVBoxLayout()  # Main layout 
+        self.top_layout = QHBoxLayout()  # Top row layout 
+        self.form_layout = QFormLayout()  # Form layout top left of main
+        self.graph_layout = QHBoxLayout()  # Form layout  top right of main
+   
 
         # Field definitions
         self.fields = ["Date", "Category", "Amount", "Description", "Recurring", "Tags", "Discount", "Priority"]
@@ -72,7 +75,7 @@ class MainWindow(QMainWindow):
                     current_date = datetime.now().date()  # Fetch current date
                     line_edit.setText(current_date.strftime("%d.%m.%Y"))  # Set formatted current date as initial text
                 elif field == "Amount":
-                    line_edit.setPlaceholderText(tr.t("Amount"))
+                    line_edit.setText(current_date.strftime("0.00"))  # Set formatted current date as initial text
                 elif field == "Discount":
                     line_edit.setPlaceholderText("%")
                 self.inputs[field] = line_edit
@@ -90,9 +93,35 @@ class MainWindow(QMainWindow):
         self.lang_button.clicked.connect(self.switch_language)  # Connect to language-switching method
         self.form_layout.addRow(self.lang_button)
 
+        # Add spacer to graph_layout - THIS IS A PLACEHOLDER-------------------------------------------------------------------------------<<< LOOK HERE
+        self.graph_layout.addItem(QSpacerItem(1, 1, QSizePolicy.Expanding, QSizePolicy.Minimum))
+
+        # Nest layouts
+        self.top_layout.addLayout(self.form_layout,1) 
+        self.top_layout.addLayout(self.graph_layout,1) 
+        self.main_layout.addLayout(self.top_layout)
+
         # Set the layout for the central widget
-        central_widget.setLayout(self.form_layout)
+        central_widget.setLayout(self.main_layout)
         self.setCentralWidget(central_widget)
+
+        # Create the table widget
+        self.table_widget = QTableWidget()
+        self.table_widget.setColumnCount(len(self.fields))  # Number of columns
+        self.table_widget.setHorizontalHeaderLabels(self.fields)  # Set column headers
+        # Enable dynamic column resizing
+        self.table_widget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        # Add the table to the main layout (e.g., bottom row)
+        self.main_layout.addWidget(self.table_widget)
+        # Set the number of rows in the table
+        data=dh.read_csv('data.csv')
+        self.table_widget.setRowCount(len(data)-1) #1st row is headers so minus 1
+        # Populate the table with data
+        for row_idx, row in enumerate(data[1:]):  # Start from the second row in the CSV
+            for col_idx, cell in enumerate(row):
+                table_item = QTableWidgetItem(cell)
+                self.table_widget.setItem(row_idx, col_idx, table_item)  
+
 
     def submit_data(self):
         # Gather data from all input fields

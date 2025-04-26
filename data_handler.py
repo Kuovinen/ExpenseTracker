@@ -1,5 +1,6 @@
 import pandas as pd
 import os
+import csv  # To read the CSV file
 
 def create_csv(file_name, headers):
     if(os.path.exists(file_name)):
@@ -23,3 +24,9 @@ def append_row_to_csv(file_name, new_row):
         print(f"Updated '{file_name}' successfully!")
     else:
         print("No save data located, can not add new entry!")
+
+def read_csv(csv_file):
+    with open(csv_file, "r", newline="", encoding="utf-8") as file:
+        reader = csv.reader(file)
+        data = list(reader)  # Convert the CSV reader to a list of rows
+    return data
