@@ -1,3 +1,7 @@
 Date,Category,Amount,Description,Recurring,Tags,Discount,Priority
-2025-04-24,Food,50.75,Dinner at Joe's,No,Urgent,5.0,High
-test,,,,Да,,,
+26.04.2025,Еда,,,Да,,,Высокий
+26.04.2025,Еда,,,Да,,,Высокий
+26.04.2025,Еда,,,Да,,,Высокий
+26.04.2025,Food,,,Yes,,,High
+26.04.2025,Food,,,Yes,,,High
+26.04.2025,Food,,,Yes,,,High
