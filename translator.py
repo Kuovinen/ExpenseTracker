@@ -13,6 +13,8 @@ texts = load_translations("lang.json")
 # Function to fetch the current translation
 def t(key ):
     return texts[key].get(LANG, key)  # Default to key if no translation exists
+def t2(key ):
+    return texts[key].get('eng', key)  # Default to key if no translation exists
 
 
 def change_lang(new_lang):

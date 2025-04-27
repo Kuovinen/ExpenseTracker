@@ -1,6 +1,8 @@
 import pandas as pd
 import os
 import csv  # To read the CSV file
+import uuid
+
 
 def create_csv(file_name, headers):
     if(os.path.exists(file_name)):
@@ -15,7 +17,7 @@ def append_row_to_csv(file_name, new_row):
     if(os.path.exists(file_name)):
         # Read the existing CSV file into a DataFrame
         df = pd.read_csv(file_name)
-
+        new_row['uuid']=str(uuid.uuid4()).replace("-", "")
         # Append the new row to the DataFrame
         df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
 

@@ -3,7 +3,9 @@ from PySide6.QtWidgets import (
     QLabel, QLineEdit, QComboBox, QFormLayout, QPushButton,QSpacerItem,
     QSizePolicy,QTableWidget, QTableWidgetItem, QHeaderView
 )
-from PySide6.QtCore import QFile
+from PySide6.QtCore import QFile,QRegularExpression
+from PySide6.QtGui import QDoubleValidator,QRegularExpressionValidator
+from functools import partial
 import translator as tr  # Import the Translator module
 from datetime import datetime
 import data_handler as dh
@@ -74,8 +76,14 @@ class MainWindow(QMainWindow):
                 if field == "Date":
                     current_date = datetime.now().date()  # Fetch current date
                     line_edit.setText(current_date.strftime("%d.%m.%Y"))  # Set formatted current date as initial text
+                    regex = QRegularExpression(r"^\d{2}\.\d{2}\.\d{4}$")  # Example: 25.04.2025
+                    validatorD = QRegularExpressionValidator(regex)
+                    line_edit.setValidator(validatorD)
                 elif field == "Amount":
-                    line_edit.setText(current_date.strftime("0.00"))  # Set formatted current date as initial text
+                    line_edit.setText("0,00")  # Set formatted current date as initial text
+                    validator = QDoubleValidator(0.00, 99999999.99, 2)  # Allows up to 2 decimal places
+                    validator.setNotation(QDoubleValidator.StandardNotation)  # Ensure standard formatting
+                    line_edit.setValidator(validator)
                 elif field == "Discount":
                     line_edit.setPlaceholderText("%")
                 self.inputs[field] = line_edit
@@ -113,16 +121,19 @@ class MainWindow(QMainWindow):
         self.table_widget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         # Add the table to the main layout (e.g., bottom row)
         self.main_layout.addWidget(self.table_widget)
-        # Set the number of rows in the table
-        data=dh.read_csv('data.csv')
-        self.table_widget.setRowCount(len(data)-1) #1st row is headers so minus 1
-        # Populate the table with data
-        for row_idx, row in enumerate(data[1:]):  # Start from the second row in the CSV
-            for col_idx, cell in enumerate(row):
-                table_item = QTableWidgetItem(cell)
-                self.table_widget.setItem(row_idx, col_idx, table_item)  
+        self.populate_table(self.table_widget)
 
-
+    def populate_table(self, widget):
+            widget.clearContents()
+            # Set the number of rows in the table
+            data=dh.read_csv('data.csv')
+            widget.setRowCount(len(data)-1) #1st row is headers so minus 1
+            # Populate the table with data
+            for row_idx, row in enumerate(data[1:]):  # Start from the second row in the CSV
+                for col_idx, cell in enumerate(row):
+                    table_item = QTableWidgetItem(cell)
+                    widget.setItem(row_idx, col_idx, table_item)  
+    
     def submit_data(self):
         # Gather data from all input fields
         data = {field: self.inputs[field].currentText() if isinstance(self.inputs[field], QComboBox)
@@ -130,6 +141,7 @@ class MainWindow(QMainWindow):
                 for field in self.inputs}
         print("Submitted Data:", data)  # Print the data (you can save it or process it)
         dh.append_row_to_csv("data.csv", data)
+        self.populate_table(self.table_widget)
 
     def switch_language(self):
         # Toggle between English and Russian
