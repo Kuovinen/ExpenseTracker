@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QWidget,
     QLabel, QLineEdit, QComboBox, QFormLayout, QPushButton,QSpacerItem,
-    QSizePolicy,QTableWidget, QTableWidgetItem, QHeaderView
+    QSizePolicy,QTableWidget, QTableWidgetItem, QHeaderView,
 )
 from PySide6.QtCore import QFile,QRegularExpression
 from PySide6.QtGui import QDoubleValidator,QRegularExpressionValidator
@@ -115,8 +115,8 @@ class MainWindow(QMainWindow):
 
         # Create the table widget
         self.table_widget = QTableWidget()
-        self.table_widget.setColumnCount(len(self.fields))  # Number of columns
-        self.table_widget.setHorizontalHeaderLabels(self.fields)  # Set column headers
+        self.table_widget.setColumnCount(len(self.fields)+1)  # Number of columns
+        self.table_widget.setHorizontalHeaderLabels(self.fields+ ["Actions"])  # Set column headers
         # Enable dynamic column resizing
         self.table_widget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         # Add the table to the main layout (e.g., bottom row)
@@ -133,7 +133,25 @@ class MainWindow(QMainWindow):
                 for col_idx, cell in enumerate(row):
                     table_item = QTableWidgetItem(cell)
                     widget.setItem(row_idx, col_idx, table_item)  
-    
+                # Add a button to the last column of the row
+                delete_button = QPushButton("Delete")
+                delete_button.clicked.connect(lambda _, row_idx=row_idx: self.delete_row(row_idx))
+                widget.setCellWidget(row_idx, len(row)-1, delete_button)  # Place button in the last column
+
+    def delete_row(self, row_idx):
+        print(f"Deleting row {row_idx}")
+        
+        # Remove row from table
+        self.table_widget.removeRow(row_idx)
+
+        # Remove row from CSV file
+        data = dh.read_csv('data.csv')
+        del data[row_idx + 1]  # Adjust for headers being skipped
+        dh.write_csv('data.csv', data)  # Replace with your write function
+
+        # Refresh the table
+        self.populate_table(self.table_widget)
+
     def submit_data(self):
         # Gather data from all input fields
         data = {field: self.inputs[field].currentText() if isinstance(self.inputs[field], QComboBox)

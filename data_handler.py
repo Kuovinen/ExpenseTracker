@@ -27,6 +27,11 @@ def append_row_to_csv(file_name, new_row):
     else:
         print("No save data located, can not add new entry!")
 
+def write_csv(file_name, data):
+    with open(file_name, "w", newline="", encoding="utf-8") as file:
+        writer = csv.writer(file)
+        writer.writerows(data)  # Write all rows at once (data should be a list of lists)
+
 def read_csv(csv_file):
     with open(csv_file, "r", newline="", encoding="utf-8") as file:
         reader = csv.reader(file)
