@@ -20,7 +20,8 @@ def append_row_to_csv(file_name, new_row):
         new_row['uuid']=str(uuid.uuid4()).replace("-", "")
         # Append the new row to the DataFrame
         df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
-
+        # Sort the DataFrame by the Date column
+        df = df.sort_values(by='Date', ascending=True)
         # Save the updated DataFrame back to the CSV file
         df.to_csv(file_name, index=False)
         print(f"Updated '{file_name}' successfully!")
@@ -37,3 +38,28 @@ def read_csv(csv_file):
         reader = csv.reader(file)
         data = list(reader)  # Convert the CSV reader to a list of rows
     return data
+
+def get_expenses(csv_file):
+    # Read the CSV file into a DataFrame
+    data = pd.read_csv(csv_file)
+
+    # Clean the Amount column and convert it to float
+    data['Amount'] = data['Amount'].str.replace(',', '.').astype(float)
+
+    # Filter rows where Expense is equal to 'T'
+    filtered_data = data[data['Expense'] == 'T']
+
+    # Calculate and return the total for filtered rows
+    return round(filtered_data['Amount'].sum(), 2)
+def get_income(csv_file):
+    # Read the CSV file into a DataFrame
+    data = pd.read_csv(csv_file)
+
+    # Clean the Amount column and convert it to float
+    data['Amount'] = data['Amount'].str.replace(',', '.').astype(float)
+
+    # Filter rows where Expense is equal to 'T'
+    filtered_data = data[data['Expense'] != 'T']
+
+    # Calculate and return the total for filtered rows
+    return round(filtered_data['Amount'].sum(), 2)

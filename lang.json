@@ -19,9 +19,9 @@
     "rus": "Повторяющееся",
     "eng": "Recurring"
   },
-  "Tags": {
-    "rus": "Бирка",
-    "eng": "Tag"
+  "Expense": {
+    "rus": "Трата",
+    "eng": "Expense"
   },
   "Discount": {
     "rus": "Скидка",

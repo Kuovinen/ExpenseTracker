@@ -1,5 +1,5 @@
 QWidget {
-    background-color:rgb(12, 16, 19);
+    background-color:#0c1013;
 }
 
 QLabel {

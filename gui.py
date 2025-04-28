@@ -1,15 +1,16 @@
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QWidget,
-    QLabel, QLineEdit, QComboBox, QFormLayout, QPushButton,QSpacerItem,
-    QSizePolicy,QTableWidget, QTableWidgetItem, QHeaderView,
+    QLabel, QLineEdit, QComboBox, QFormLayout, QPushButton,
+    QTableWidget, QTableWidgetItem, QHeaderView,
 )
+
 from PySide6.QtCore import QFile,QRegularExpression
-from PySide6.QtGui import QDoubleValidator,QRegularExpressionValidator
+from PySide6.QtGui import QDoubleValidator,QRegularExpressionValidator,QPixmap
 from functools import partial
 import translator as tr  # Import the Translator module
 from datetime import datetime
 import data_handler as dh
-
+import graph_generator as gg
 
 def load_stylesheet(file_name):
     # Load the QSS stylesheet from a file.
@@ -38,18 +39,41 @@ class MainWindow(QMainWindow):
 
         # Set window properties
         self.setWindowTitle("Expense Tracker")  # Title translated
-        self.setGeometry(50, 50, 800, 600)
+        self.setGeometry(50, 50, 800, 750)
 
         # Create the central widget and layout
         central_widget = QWidget()
         self.main_layout = QVBoxLayout()  # Main layout 
         self.top_layout = QHBoxLayout()  # Top row layout 
         self.form_layout = QFormLayout()  # Form layout top left of main
-        self.graph_layout = QHBoxLayout()  # Form layout  top right of main
-   
+        self.graph_layout = QVBoxLayout()  # Form layout  top right of main
 
+        # Create a container for the balance section
+        self.balance_section = QWidget()
+        self.balance_layout = QHBoxLayout()  # Vertical layout to stack labels
+        self.balance_section.setLayout(self.balance_layout)
+
+        # Create WebView for Plotly graphs
+        self.graph_view =  QLabel()
+        self.graph_view.setFixedSize(600, 400)
+
+        # Create labels for starting and current balance
+        self.start_balance_label = QLabel(datetime.now().replace(day=1).strftime("%d.%m.%Y")+" : 1433€")
+        self.minus = QLabel("-" + str(dh.get_expenses('data.csv')) + "€")
+        self.plus = QLabel("+" + str(dh.get_income('data.csv')) + "€")
+        self.current_balance_label = QLabel(datetime.now().strftime("%d.%m.%Y")+" : 256€")
+         # Customize label styles (optional)
+        self.start_balance_label.setStyleSheet("color: white; font-size: 16px;")
+        self.minus.setStyleSheet("color: #942116; font-size: 16px;")
+        self.plus.setStyleSheet("color: #1f4d35; font-size: 16px;")
+        self.current_balance_label.setStyleSheet("color: white; font-size: 16px;")
+        # Add labels to the layout
+        self.balance_layout.addWidget(self.start_balance_label)
+        self.balance_layout.addWidget(self.minus)
+        self.balance_layout.addWidget(self.plus)
+        self.balance_layout.addWidget(self.current_balance_label)
         # Field definitions
-        self.fields = ["Date", "Category", "Amount", "Description", "Recurring", "Tags", "Discount", "Priority"]
+        self.fields = ["Date", "Category", "Amount", "Description", "Recurring", "Expense", "Discount", "Priority"]
 
         # Input widgets for fields
         self.inputs = {}
@@ -101,8 +125,9 @@ class MainWindow(QMainWindow):
         self.lang_button.clicked.connect(self.switch_language)  # Connect to language-switching method
         self.form_layout.addRow(self.lang_button)
 
-        # Add spacer to graph_layout - THIS IS A PLACEHOLDER-------------------------------------------------------------------------------<<< LOOK HERE
-        self.graph_layout.addItem(QSpacerItem(1, 1, QSizePolicy.Expanding, QSizePolicy.Minimum))
+        # Add spacer to graph_layout - THIS IS A PLACEHOLDER
+        self.graph_layout.addWidget(self.graph_view)
+        self.graph_layout.addWidget(self.balance_section)
 
         # Nest layouts
         self.top_layout.addLayout(self.form_layout,1) 
@@ -122,6 +147,20 @@ class MainWindow(QMainWindow):
         # Add the table to the main layout (e.g., bottom row)
         self.main_layout.addWidget(self.table_widget)
         self.populate_table(self.table_widget)
+        self.refresh_graph()
+        
+
+
+
+    def refresh_graph(self):
+        # Generate a daily expenses graph
+        gg.generate_daily_expenses_graph('data.csv', 'graphs/daily.png')
+        self.update_graph('graphs/daily.png')
+
+    def update_graph(self, graph_path):
+        pixmap = QPixmap(graph_path)
+        self.graph_view.setPixmap(pixmap)
+        self.graph_view.setScaledContents(True)  # Ensure the image fits the QLabel
 
     def populate_table(self, widget):
             widget.clearContents()
@@ -149,8 +188,9 @@ class MainWindow(QMainWindow):
         del data[row_idx + 1]  # Adjust for headers being skipped
         dh.write_csv('data.csv', data)  # Replace with your write function
 
-        # Refresh the table
+        # Refresh the table and graph
         self.populate_table(self.table_widget)
+        self.refresh_graph()
 
     def submit_data(self):
         # Gather data from all input fields
@@ -160,6 +200,7 @@ class MainWindow(QMainWindow):
         print("Submitted Data:", data)  # Print the data (you can save it or process it)
         dh.append_row_to_csv("data.csv", data)
         self.populate_table(self.table_widget)
+        self.refresh_graph()
 
     def switch_language(self):
         # Toggle between English and Russian
