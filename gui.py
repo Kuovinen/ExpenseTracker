@@ -4,7 +4,7 @@ from PySide6.QtWidgets import (
     QTableWidget, QTableWidgetItem, QHeaderView,
 )
 
-from PySide6.QtCore import QFile,QRegularExpression
+from PySide6.QtCore import QFile,QRegularExpression, Qt
 from PySide6.QtGui import QDoubleValidator,QRegularExpressionValidator,QPixmap
 from functools import partial
 import translator as tr  # Import the Translator module
@@ -38,40 +38,62 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         # Set window properties
-        self.setWindowTitle("Expense Tracker")  # Title translated
+        self.setWindowTitle("Expense Tracker")
         self.setGeometry(50, 50, 800, 750)
 
         # Create the central widget and layout
-        central_widget = QWidget()
+        central_widget = QWidget() # Global container
         self.main_layout = QVBoxLayout()  # Main layout 
         self.top_layout = QHBoxLayout()  # Top row layout 
         self.form_layout = QFormLayout()  # Form layout top left of main
-        self.graph_layout = QVBoxLayout()  # Form layout  top right of main
+        self.graph_layout = QVBoxLayout()  # Form layout top right of main
+        self.table_widget = QTableWidget() # Create the bottom table widget
 
-        # Create a container for the balance section
+        # Create a container for the current balance section (top right bottom)
         self.balance_section = QWidget()
-        self.balance_layout = QHBoxLayout()  # Vertical layout to stack labels
+        self.balance_layout = QHBoxLayout()
         self.balance_section.setLayout(self.balance_layout)
 
-        # Create WebView for Plotly graphs
+        # Create QLabel for Plotly graphs
         self.graph_view =  QLabel()
         self.graph_view.setFixedSize(600, 400)
+
+        # Place graph  section into graph layout
+        self.graph_layout.addWidget(self.graph_view)
+
+        # Nest main layouts
+        self.top_layout.addLayout(self.form_layout, 1) 
+        self.top_layout.addLayout(self.graph_layout, 1) 
+        self.main_layout.addLayout(self.top_layout)
+        self.main_layout.addWidget(self.table_widget)
 
         # Create labels for starting and current balance
         self.start_balance_label = QLabel(datetime.now().replace(day=1).strftime("%d.%m.%Y")+" : 1433€")
         self.minus = QLabel("-" + str(dh.get_expenses('data.csv')) + "€")
         self.plus = QLabel("+" + str(dh.get_income('data.csv')) + "€")
         self.current_balance_label = QLabel(datetime.now().strftime("%d.%m.%Y")+" : 256€")
-         # Customize label styles (optional)
+
+         # Customize label styles
         self.start_balance_label.setStyleSheet("color: white; font-size: 16px;")
         self.minus.setStyleSheet("color: #942116; font-size: 16px;")
         self.plus.setStyleSheet("color: #1f4d35; font-size: 16px;")
         self.current_balance_label.setStyleSheet("color: white; font-size: 16px;")
+
         # Add labels to the layout
-        self.balance_layout.addWidget(self.start_balance_label)
-        self.balance_layout.addWidget(self.minus)
-        self.balance_layout.addWidget(self.plus)
-        self.balance_layout.addWidget(self.current_balance_label)
+        self.balance_layout.addWidget(self.start_balance_label, stretch=1)
+        self.balance_layout.addWidget(self.minus, stretch=1)
+        self.balance_layout.addWidget(self.plus, stretch=1)
+        self.balance_layout.addWidget(self.current_balance_label, stretch=1)
+        self.current_balance_label.setAlignment(Qt.AlignRight)
+        self.main_layout.addWidget(self.balance_section)
+
+        # Form layout visual balancing
+        self.form_layout.setContentsMargins(0, 40, 0, 0)
+
+        # Set the layout for the central widget
+        central_widget.setLayout(self.main_layout)
+        self.setCentralWidget(central_widget)
+
         # Field definitions
         self.fields = ["Date", "Category", "Amount", "Description", "Recurring", "Expense", "Discount", "Priority"]
 
@@ -125,31 +147,20 @@ class MainWindow(QMainWindow):
         self.lang_button.clicked.connect(self.switch_language)  # Connect to language-switching method
         self.form_layout.addRow(self.lang_button)
 
-        # Add spacer to graph_layout - THIS IS A PLACEHOLDER
-        self.graph_layout.addWidget(self.graph_view)
-        self.graph_layout.addWidget(self.balance_section)
-
-        # Nest layouts
-        self.top_layout.addLayout(self.form_layout,1) 
-        self.top_layout.addLayout(self.graph_layout,1) 
-        self.main_layout.addLayout(self.top_layout)
-
-        # Set the layout for the central widget
-        central_widget.setLayout(self.main_layout)
-        self.setCentralWidget(central_widget)
-
-        # Create the table widget
-        self.table_widget = QTableWidget()
+        # Table set up
         self.table_widget.setColumnCount(len(self.fields)+1)  # Number of columns
         self.table_widget.setHorizontalHeaderLabels(self.fields+ ["Actions"])  # Set column headers
         # Enable dynamic column resizing
         self.table_widget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+
         # Add the table to the main layout (e.g., bottom row)
         self.main_layout.addWidget(self.table_widget)
         self.populate_table(self.table_widget)
         self.refresh_graph()
         
 
+    # FUNCTIONS-----------------------------------------------------------------------------------------------------FUNCTIONS
+    # FUNCTIONS-----------------------------------------------------------------------------------------------------FUNCTIONS
 
 
     def refresh_graph(self):
@@ -206,6 +217,13 @@ class MainWindow(QMainWindow):
         # Toggle between English and Russian
         new_lang = "eng" if tr.LANG == "rus" else "rus"
         tr.change_lang(new_lang)
+
+        # Table hearder translation
+        newFields = []
+        for field in self.fields:
+            newFields.append(tr.t(field))  # Apply translation function
+
+        self.table_widget.setHorizontalHeaderLabels(newFields + [tr.t("Actions")]) 
 
         # Update all labels based on field names
         for index, field in enumerate(self.fields):

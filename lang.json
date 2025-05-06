@@ -16,7 +16,7 @@
     "eng": "Description"
   },
   "Recurring": {
-    "rus": "Повторяющееся",
+    "rus": "Регулярный",
     "eng": "Recurring"
   },
   "Expense": {
@@ -30,6 +30,10 @@
   "Priority": {
     "rus": "Приоритет",
     "eng": "Priority"
+  },
+  "Actions": {
+    "rus": "Действие",
+    "eng": "Actions"
   },
   "change_language": {
     "rus": "Сменить язык",
