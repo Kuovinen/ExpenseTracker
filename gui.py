@@ -103,9 +103,9 @@ class MainWindow(QMainWindow):
             if field in ["Recurring", "Priority", "Category", "Income"]:  # Dropdown fields
                 combo = QComboBox()
                 if field == "Recurring":
-                    combo.addItems([tr.t("yes"), tr.t("no")])  # Options for Recurring
+                    combo.addItems([tr.t("no"),tr.t("yes") ])  # Options for Recurring
                 elif field == "Income":
-                    combo.addItems([tr.t("yes"), tr.t("no")])  # Options for Expense
+                    combo.addItems([tr.t("no"),tr.t("yes") ])  # Options for Expense
                 elif field == "Priority":
                     combo.addItems([tr.t("high"), tr.t("medium"), tr.t("low")])  # Options for Priority
                 elif field == "Category":
@@ -271,9 +271,9 @@ class MainWindow(QMainWindow):
             if isinstance(widget, QComboBox):
                 widget.clear()  # Remove all items
                 if field == "Recurring":
-                    widget.addItems([tr.t("yes"), tr.t("no")])
+                    widget.addItems([tr.t("no"),tr.t("yes") ])
                 elif field == "Income":
-                    widget.addItems([tr.t("yes"), tr.t("no")]) 
+                    widget.addItems([tr.t("no"),tr.t("yes") ]) 
                 elif field == "Priority":
                     widget.addItems([tr.t("high"), tr.t("medium"), tr.t("low")])
                 elif field == "Category":

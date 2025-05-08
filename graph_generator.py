@@ -10,6 +10,9 @@ def generate_daily_expenses_graph(csv_file, output_file):
     data = pd.read_csv(csv_file, parse_dates=['Date'])
     data['Amount'] = data['Amount'].str.replace(',', '.').astype(float)  # Convert Amount to float
     
+    # Filter out incomes** (keep only rows where 'Income' is "no")
+    data = data[data['Income'] == "no"]
+
     # Group by date and sum up expenses
     daily_expenses = data.groupby('Date')['Amount'].sum()
     
