@@ -168,6 +168,11 @@ class MainWindow(QMainWindow):
         gg.generate_daily_expenses_graph('data.csv', 'graphs/daily.png')
         self.update_graph('graphs/daily.png')
 
+    def refresh_balance(self):
+        # Generate new incom expense and total values
+        self.minus.setText("-" + str(dh.get_expenses('data.csv')) + "€")
+        self.plus.setText("+" + str(dh.get_income('data.csv')) + "€")
+
     def update_graph(self, graph_path):
         pixmap = QPixmap(graph_path)
         self.graph_view.setPixmap(pixmap)
@@ -202,6 +207,7 @@ class MainWindow(QMainWindow):
         # Refresh the table and graph
         self.populate_table(self.table_widget)
         self.refresh_graph()
+        self.refresh_balance()
 
     def submit_data(self):
         # Gather data from all input fields
