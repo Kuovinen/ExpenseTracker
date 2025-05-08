@@ -68,10 +68,12 @@ class MainWindow(QMainWindow):
         self.main_layout.addWidget(self.table_widget)
 
         # Create labels for starting and current balance
-        self.start_balance_label = QLabel(datetime.now().replace(day=1).strftime("%d.%m.%Y")+" : 1433€")
-        self.minus = QLabel("-" + str(dh.get_expenses('data.csv')) + "€")
-        self.plus = QLabel("+" + str(dh.get_income('data.csv')) + "€")
-        self.current_balance_label = QLabel(datetime.now().strftime("%d.%m.%Y")+" : 256€")
+        self.start_balance_label = QLabel(f"{datetime.now().replace(day=1).strftime('%d.%m.%Y')} :{self.get_balance()}€")
+        expensesTotal=dh.get_expenses('data.csv')
+        incomeTotal=dh.get_income('data.csv')
+        self.minus = QLabel("-" + str(expensesTotal) + "€")
+        self.plus = QLabel("+" + str(incomeTotal) + "€")
+        self.current_balance_label = QLabel(f"{datetime.now().strftime('%d.%m.%Y')} : {self.get_balance() - expensesTotal + incomeTotal}€")
 
          # Customize label styles
         self.start_balance_label.setStyleSheet("color: white; font-size: 16px;")
@@ -172,8 +174,11 @@ class MainWindow(QMainWindow):
 
     def refresh_balance(self):
         # Generate new incom expense and total values
-        self.minus.setText("-" + str(dh.get_expenses('data.csv')) + "€")
-        self.plus.setText("+" + str(dh.get_income('data.csv')) + "€")
+        expensesTotal=dh.get_expenses('data.csv')
+        incomeTotal=dh.get_income('data.csv')
+        self.minus.setText("-" + str(expensesTotal) + "€")
+        self.plus.setText("+" + str(incomeTotal) + "€")
+        self.current_balance_label.setText(f"{datetime.now().strftime('%d.%m.%Y')} : {self.get_balance() - expensesTotal + incomeTotal}€")
 
     def update_graph(self, graph_path):
         pixmap = QPixmap(graph_path)
@@ -200,7 +205,10 @@ class MainWindow(QMainWindow):
                 delete_button = QPushButton("Delete")
                 delete_button.clicked.connect(lambda _, row_idx=row_idx: self.delete_row(row_idx))
                 widget.setCellWidget(row_idx, len(row)-1, delete_button)  # Place button in the last column
-
+    def get_balance(self):
+        balance=dh.read_csv('balance.csv')
+        return float(balance[len(balance)-1][1].replace(',', '.'))
+        
     def delete_row(self, row_idx):
         print(f"Deleting row {row_idx}")
         

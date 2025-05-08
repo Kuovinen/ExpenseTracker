@@ -3,3 +3,13 @@ Date,Category,Amount,Description,Recurring,Income,Discount,Priority,uuid
 04.05.2025,Food,"20,00",,no,no,,high,24848f2bd11e4575996c4e8a72b4919e
 05.05.2025,Food,"10,00",,no,no,,high,2a201a9329e14357b250b0f743e3a253
 08.05.2025,Food,"20,00",,no,yes,,high,4ce88652892848c4907e30d829ecda48
+08.05.2025,Food,"10,00",,no,no,,high,5d289998d34545c2b64110dd423c9bbe
+08.05.2025,Food,"10,00",,no,no,,high,b0d146ada7664ed18bcd5a7b0c9f0530
+08.05.2025,Food,"5,00",,no,no,,high,e112ff5feeff4b74822803c7c0b103ef
+08.05.2025,Food,"5,00",,no,no,,high,819135dcbc2b48b0ad9cd1a06e516b71
+09.05.2025,Food,"15,00",,no,yes,,high,598d791b5d62455685325e31912337b1
+09.05.2025,Food,"15,00",,no,yes,,high,0d71efe8baa0443bbead4569bfe07ec2
+09.05.2025,Food,"15,00",,no,yes,,high,a9b37cdc3a954cca958676f57f094cef
+09.05.2025,Food,"15,00",,no,yes,,high,c1d2ea6305be43a1b3ab4d2f811b5cbd
+09.05.2025,Food,"15,00",,no,yes,,high,381c523c259b47b295abc5027b623d26
+09.05.2025,Food,"15,00",,no,yes,,high,b4cbb9a2fd284a159c4adbbf4bffc5f6
