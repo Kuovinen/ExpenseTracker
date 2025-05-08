@@ -47,10 +47,11 @@ def get_expenses(csv_file):
     data['Amount'] = data['Amount'].str.replace(',', '.').astype(float)
 
     # Filter rows where Expense is equal to 'T'
-    filtered_data = data[data['Expense'] == 'T']
+    filtered_data = data[data['Income'] != 'yes']
 
     # Calculate and return the total for filtered rows
     return round(filtered_data['Amount'].sum(), 2)
+
 def get_income(csv_file):
     # Read the CSV file into a DataFrame
     data = pd.read_csv(csv_file)
@@ -59,7 +60,7 @@ def get_income(csv_file):
     data['Amount'] = data['Amount'].str.replace(',', '.').astype(float)
 
     # Filter rows where Expense is equal to 'T'
-    filtered_data = data[data['Expense'] != 'T']
+    filtered_data = data[data['Income'] == 'yes']
 
     # Calculate and return the total for filtered rows
     return round(filtered_data['Amount'].sum(), 2)

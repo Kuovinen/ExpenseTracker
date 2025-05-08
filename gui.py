@@ -95,15 +95,17 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(central_widget)
 
         # Field definitions
-        self.fields = ["Date", "Category", "Amount", "Description", "Recurring", "Expense", "Discount", "Priority"]
+        self.fields = ["Date", "Category", "Amount", "Description", "Recurring", "Income", "Discount", "Priority"]
 
         # Input widgets for fields
         self.inputs = {}
         for field in self.fields:
-            if field in ["Recurring", "Priority", "Category"]:  # Dropdown fields
+            if field in ["Recurring", "Priority", "Category", "Income"]:  # Dropdown fields
                 combo = QComboBox()
                 if field == "Recurring":
                     combo.addItems([tr.t("yes"), tr.t("no")])  # Options for Recurring
+                elif field == "Income":
+                    combo.addItems([tr.t("yes"), tr.t("no")])  # Options for Expense
                 elif field == "Priority":
                     combo.addItems([tr.t("high"), tr.t("medium"), tr.t("low")])  # Options for Priority
                 elif field == "Category":
@@ -183,11 +185,17 @@ class MainWindow(QMainWindow):
             # Set the number of rows in the table
             data=dh.read_csv('data.csv')
             widget.setRowCount(len(data)-1) #1st row is headers so minus 1
-            # Populate the table with data
+            
+
             for row_idx, row in enumerate(data[1:]):  # Start from the second row in the CSV
                 for col_idx, cell in enumerate(row):
+                    if col_idx < len(self.fields):  # Ensure col_idx is within bounds
+                        if self.fields[col_idx] == "Income" and cell == "no":
+                            cell = ""  # Replace "NO" with an empty string for display purposes
+                    
                     table_item = QTableWidgetItem(cell)
-                    widget.setItem(row_idx, col_idx, table_item)  
+                    widget.setItem(row_idx, col_idx, table_item)
+ 
                 # Add a button to the last column of the row
                 delete_button = QPushButton("Delete")
                 delete_button.clicked.connect(lambda _, row_idx=row_idx: self.delete_row(row_idx))
@@ -211,13 +219,19 @@ class MainWindow(QMainWindow):
 
     def submit_data(self):
         # Gather data from all input fields
-        data = {field: self.inputs[field].currentText() if isinstance(self.inputs[field], QComboBox)
-                else self.inputs[field].text()
-                for field in self.inputs}
+        data = {
+            field: tr.t2(self.inputs[field].currentText()) if tr.LANG == "rus" and field in ["Category", "Recurring", "Income", "Priority"] and isinstance(self.inputs[field], QComboBox)
+            else tr.t2(self.inputs[field].text()) if tr.LANG == "rus" and field in ["Category", "Recurring", "Income", "Priority"]
+            else self.inputs[field].currentText() if isinstance(self.inputs[field], QComboBox)
+            else self.inputs[field].text()
+            for field in self.inputs
+        }
+
         print("Submitted Data:", data)  # Print the data (you can save it or process it)
         dh.append_row_to_csv("data.csv", data)
         self.populate_table(self.table_widget)
         self.refresh_graph()
+        self.refresh_balance()
 
     def switch_language(self):
         # Toggle between English and Russian
@@ -258,6 +272,8 @@ class MainWindow(QMainWindow):
                 widget.clear()  # Remove all items
                 if field == "Recurring":
                     widget.addItems([tr.t("yes"), tr.t("no")])
+                elif field == "Income":
+                    widget.addItems([tr.t("yes"), tr.t("no")]) 
                 elif field == "Priority":
                     widget.addItems([tr.t("high"), tr.t("medium"), tr.t("low")])
                 elif field == "Category":

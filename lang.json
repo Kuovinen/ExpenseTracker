@@ -19,9 +19,9 @@
     "rus": "Регулярный",
     "eng": "Recurring"
   },
-  "Expense": {
-    "rus": "Трата",
-    "eng": "Expense"
+  "Income": {
+    "rus": "Доход",
+    "eng": "Income"
   },
   "Discount": {
     "rus": "Скидка",
