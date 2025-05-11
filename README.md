@@ -5,9 +5,10 @@ A simple expense logging app written in Python.
 #### Dependencies
 
 This app requires the following libraries: 
- -**PySide6**  
- -**Pandas**  
- -**Matplotlib**
+
+ - **PySide6**  
+ - **Pandas**  
+ - **Matplotlib**
 
 Install them using:
 
