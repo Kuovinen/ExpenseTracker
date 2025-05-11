@@ -1,0 +1,3 @@
+pandas==latest
+matplotlib==latest
+PySide6==latest
