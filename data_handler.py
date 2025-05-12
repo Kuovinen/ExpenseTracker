@@ -42,9 +42,11 @@ def read_csv(csv_file):
 
 def get_balance(balance):
         return float(balance[len(balance)-1][1].replace(',', '.'))
+
 def get_balance_date(balance):
          date = balance[len(balance)-1][0]
          return datetime.strptime(date, '%d.%m.%Y')
+
 def get_current_month_data():
         current_month_start= datetime.now().replace(day=1)
         df = pd.read_csv('data.csv', parse_dates=['Date'], dayfirst=True)
@@ -52,9 +54,13 @@ def get_current_month_data():
         filtered_df = df[(df['Date'] >= current_month_start)]
         return filtered_df
 
-def defineBalance2():
-    if balance_date.year < current_month_start.year or balance_date.month < current_month_start.month:
-         print()
+def checkIfNewMonth():
+    current_month_start= datetime.now().replace(day=1)
+    balance=read_csv('balance.csv')
+    currentBalanceDate = get_balance_date(balance)
+    if currentBalanceDate < current_month_start:
+         print('New month has started')
+         return currentBalanceDate < current_month_start
 
 def defineBalance():
     current_month_start= datetime.now().replace(day=1)
@@ -77,3 +83,5 @@ def defineBalance():
                 'total_income':total_income, 
                 'saved_balance':saved_balance 
                 }
+    
+    # still needs an automatic current balance update to balance.csv when month changes.
