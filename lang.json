@@ -39,6 +39,10 @@
     "rus": "Сменить язык",
     "eng": "Change Language"
   },
+  "Delete": {
+    "rus": "Удалить",
+    "eng": "Delete"
+  },
   "add": {
     "rus": "Добавить",
     "eng": "Add"

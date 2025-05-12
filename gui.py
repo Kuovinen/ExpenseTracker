@@ -11,6 +11,7 @@ import translator as tr  # Import the Translator module
 from datetime import datetime
 import data_handler as dh
 import graph_generator as gg
+import pandas as pd
 
 def load_stylesheet(file_name):
     # Load the QSS stylesheet from a file.
@@ -193,18 +194,23 @@ class MainWindow(QMainWindow):
             for row_idx, row in enumerate(data): 
                 for col_idx, cell in enumerate(row):
                     if col_idx < len(self.fields):  # Ensure col_idx is within bounds
-                        if self.fields[col_idx] == "Income" and cell == "no":
+                        if (self.fields[col_idx] == "Income" or self.fields[col_idx] == "Recurring") and cell == "no":
                             cell = ""  # Replace "NO" with an empty string for display purposes
-                        
                         # Check if the column corresponds to "Date" and format it
-                        if self.fields[col_idx] == "Date":
+                        elif self.fields[col_idx] == "Date":
                             cell = datetime.strptime(str(cell), '%Y-%m-%d %H:%M:%S').strftime('%d.%m.%Y')
-
+                        elif (self.fields[col_idx] == "Income"or self.fields[col_idx] == "Recurring") and  str(cell)=='yes':
+                            cell = tr.t(str(cell))
+                        elif self.fields[col_idx] == "Category" or self.fields[col_idx] == "Priority":
+                            cell = tr.t(str(cell))
+                        elif (self.fields[col_idx] == "Description" or self.fields[col_idx] == "Discount")  and pd.isna(cell):
+                            cell=''
+                            
                     table_item = QTableWidgetItem(str(cell))  # Ensure data is always a string
                     widget.setItem(row_idx, col_idx, table_item)
  
                 # Add a button to the last column of the row
-                delete_button = QPushButton("Delete")
+                delete_button = QPushButton(tr.t("Delete"))
                 delete_button.clicked.connect(lambda _, row_idx=row_idx: self.delete_row(row_idx))
                 widget.setCellWidget(row_idx, len(row)-1, delete_button)  # Place button in the last column
     def get_balance(self):
@@ -247,14 +253,14 @@ class MainWindow(QMainWindow):
         # Toggle between English and Russian
         new_lang = "eng" if tr.LANG == "rus" else "rus"
         tr.change_lang(new_lang)
-
+        
         # Table hearder translation
         newFields = []
         for field in self.fields:
             newFields.append(tr.t(field))  # Apply translation function
 
         self.table_widget.setHorizontalHeaderLabels(newFields + [tr.t("Actions")]) 
-
+        self.populate_table(self.table_widget)
         # Update all labels based on field names
         for index, field in enumerate(self.fields):
             # Get the corresponding QLabel for the field
