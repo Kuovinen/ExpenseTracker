@@ -39,31 +39,6 @@ def read_csv(csv_file):
         data = list(reader)  # Convert the CSV reader to a list of rows
     return data
 
-def get_expenses(csv_file):
-    # Read the CSV file into a DataFrame
-    data = pd.read_csv(csv_file)
-
-    # Clean the Amount column and convert it to float
-    data['Amount'] = data['Amount'].str.replace(',', '.').astype(float)
-
-    # Filter rows where Expense is equal to 'T'
-    filtered_data = data[data['Income'] != 'yes']
-
-    # Calculate and return the total for filtered rows
-    return round(filtered_data['Amount'].sum(), 2)
-
-def get_income(csv_file):
-    # Read the CSV file into a DataFrame
-    data = pd.read_csv(csv_file)
-
-    # Clean the Amount column and convert it to float
-    data['Amount'] = data['Amount'].str.replace(',', '.').astype(float)
-
-    # Filter rows where Expense is equal to 'T'
-    filtered_data = data[data['Income'] == 'yes']
-
-    # Calculate and return the total for filtered rows
-    return round(filtered_data['Amount'].sum(), 2)
 
 def get_balance(balance):
         return float(balance[len(balance)-1][1].replace(',', '.'))
@@ -72,12 +47,9 @@ def get_balance_date(balance):
          return datetime.strptime(date, '%d.%m.%Y')
 def get_current_month_data():
         current_month_start= datetime.now().replace(day=1)
-        previous_month_start = (current_month_start - pd.DateOffset(months=1))
-
         df = pd.read_csv('data.csv', parse_dates=['Date'], dayfirst=True)
         # Filter the data
-        filtered_df = df[(df['Date'] >= previous_month_start) & (df['Date'] < current_month_start)]
-
+        filtered_df = df[(df['Date'] >= current_month_start)]
         return filtered_df
 
 def defineBalance2():
@@ -98,11 +70,6 @@ def defineBalance():
         total_expense = data[data['Income'] == 'no']['Amount'].sum()
         total_income = data[data['Income'] == 'yes']['Amount'].sum()
         current_balance = saved_balance - total_expense + total_income
-        print(data)
-        print(f"Balance: {saved_balance}")
-        print(f"Total Expense: {total_expense}")
-        print(f"Total Income: {total_income}")
-        print(f"End result: {current_balance}")
         return {'date_now':datetime.now().strftime('%d.%m.%Y'),
                 'current_month_start':current_month_start.strftime('%d.%m.%Y'),
                 'current_balance':current_balance,

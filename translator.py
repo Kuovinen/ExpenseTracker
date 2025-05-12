@@ -1,7 +1,7 @@
 import json
 
 # Global language variable
-LANG = "rus"
+LANG = "eng"
 
 
 # Load translations from file

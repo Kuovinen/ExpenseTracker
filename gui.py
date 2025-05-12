@@ -186,17 +186,21 @@ class MainWindow(QMainWindow):
     def populate_table(self, widget):
             widget.clearContents()
             # Set the number of rows in the table
-            data=dh.read_csv('data.csv')
-            widget.setRowCount(len(data)-1) #1st row is headers so minus 1
-            
+            data = dh.get_current_month_data().values.tolist()
+            widget.setRowCount(len(data))
 
-            for row_idx, row in enumerate(data[1:]):  # Start from the second row in the CSV
+
+            for row_idx, row in enumerate(data): 
                 for col_idx, cell in enumerate(row):
                     if col_idx < len(self.fields):  # Ensure col_idx is within bounds
                         if self.fields[col_idx] == "Income" and cell == "no":
                             cell = ""  # Replace "NO" with an empty string for display purposes
-                    
-                    table_item = QTableWidgetItem(cell)
+                        
+                        # Check if the column corresponds to "Date" and format it
+                        if self.fields[col_idx] == "Date":
+                            cell = datetime.strptime(str(cell), '%Y-%m-%d %H:%M:%S').strftime('%d.%m.%Y')
+
+                    table_item = QTableWidgetItem(str(cell))  # Ensure data is always a string
                     widget.setItem(row_idx, col_idx, table_item)
  
                 # Add a button to the last column of the row
