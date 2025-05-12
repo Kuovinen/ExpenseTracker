@@ -68,12 +68,12 @@ class MainWindow(QMainWindow):
         self.main_layout.addWidget(self.table_widget)
 
         # Create labels for starting and current balance
-        self.start_balance_label = QLabel(f"{datetime.now().replace(day=1).strftime('%d.%m.%Y')} :{self.get_balance()}€")
-        expensesTotal=dh.get_expenses('data.csv')
-        incomeTotal=dh.get_income('data.csv')
-        self.minus = QLabel("-" + str(expensesTotal) + "€")
-        self.plus = QLabel("+" + str(incomeTotal) + "€")
-        self.current_balance_label = QLabel(f"{datetime.now().strftime('%d.%m.%Y')} : {self.get_balance() - expensesTotal + incomeTotal}€")
+        data=dh.defineBalance()
+        print(data)
+        self.start_balance_label = QLabel(f"{data['current_month_start']} :{data['saved_balance']}€")
+        self.minus = QLabel("-" + str(data['total_expense']) + "€")
+        self.plus = QLabel("+" + str(data['total_income']) + "€")
+        self.current_balance_label = QLabel(f"{data['date_now']} : {data['current_balance']}€")
 
          # Customize label styles
         self.start_balance_label.setStyleSheet("color: white; font-size: 16px;")
@@ -161,7 +161,7 @@ class MainWindow(QMainWindow):
         self.main_layout.addWidget(self.table_widget)
         self.populate_table(self.table_widget)
         self.refresh_graph()
-        
+        dh.defineBalance()
 
     # FUNCTIONS-----------------------------------------------------------------------------------------------------FUNCTIONS
     # FUNCTIONS-----------------------------------------------------------------------------------------------------FUNCTIONS
@@ -173,12 +173,10 @@ class MainWindow(QMainWindow):
         self.update_graph('graphs/daily.png')
 
     def refresh_balance(self):
-        # Generate new incom expense and total values
-        expensesTotal=dh.get_expenses('data.csv')
-        incomeTotal=dh.get_income('data.csv')
-        self.minus.setText("-" + str(expensesTotal) + "€")
-        self.plus.setText("+" + str(incomeTotal) + "€")
-        self.current_balance_label.setText(f"{datetime.now().strftime('%d.%m.%Y')} : {self.get_balance() - expensesTotal + incomeTotal}€")
+        data=dh.defineBalance()
+        self.minus.setText("-" + str(data['total_expense']) + "€")
+        self.plus.setText("+" + str(data['total_income']) + "€")
+        self.current_balance_label.setText(f"{data['date_now']} : {data['current_balance']}€")
 
     def update_graph(self, graph_path):
         pixmap = QPixmap(graph_path)
